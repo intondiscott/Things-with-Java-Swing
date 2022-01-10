@@ -1,16 +1,14 @@
-import org.w3c.dom.ls.LSOutput;
-
-import javax.lang.model.type.NullType;
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JTextField;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.util.ArrayList;
 
 public class Calculator extends JFrame {
     private boolean isVisible;
-    private final ArrayList<JButton> buttons = new ArrayList<JButton>(11);
-    private final ArrayList<JButton> operators = new ArrayList<JButton>(4);
+    private final ArrayList<JButton> buttons = new ArrayList<>(11);
+    private final ArrayList<JButton> operators = new ArrayList<>(4);
     public String operator;
     JButton result;
     GridBagLayout grid = new GridBagLayout();
@@ -32,13 +30,10 @@ public class Calculator extends JFrame {
     public void setFirstNum(double number){
         this.firstNum = number;
     }
-    public double getFirstNum(){
-        return this.firstNum;
-    }
 
     public void makeUI(){
         for (int i = 0; i < 10; i++){
-            JButton buttonsi = new JButton(new String(String.valueOf(i)));
+            JButton buttonsi = new JButton(String.valueOf(i));
             buttonsi.setFocusable(false);
             buttons.add(buttonsi);
         }
@@ -143,46 +138,37 @@ public class Calculator extends JFrame {
     }
     void createActionListeners(){
         for(JButton button:buttons){
-            button.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    inputField = input.getText()+ button.getText();
-                    input.setText(inputField);
-                }
+            button.addActionListener(e -> {
+                inputField = input.getText()+ button.getText();
+                input.setText(inputField);
             });
         }
 
         for (JButton op: operators){
-            op.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    firstNum = Double.parseDouble(input.getText());
-                    setFirstNum(firstNum);
-                    operator = op.getText();
-                    input.setText("");
-                }
+            op.addActionListener(e -> {
+                firstNum = Double.parseDouble(input.getText());
+                setFirstNum(firstNum);
+                operator = op.getText();
+                input.setText("");
             });
         }
-        result.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                double secondNum = 0.0;
-                try{
-                    secondNum = Double.parseDouble(input.getText());
-                }
-                catch (Exception a){
-                    a.getStackTrace();
-                }
-                double equals;
-                switch(operator){
-                    case "+" -> equals = firstNum + secondNum;
-                    case "-" -> equals = firstNum - secondNum;
-                    case "*" -> equals = firstNum * secondNum;
-                    case "/" -> equals = firstNum / secondNum;
-                    default -> equals = 0.0;
-                }
-                input.setText(String.valueOf(equals));
+        result.addActionListener(e -> {
+            double secondNum = 0.0;
+            try{
+                secondNum = Double.parseDouble(input.getText());
             }
+            catch (Exception a){
+                a.getStackTrace();
+            }
+            double equals;
+            switch(operator){
+                case "+" -> equals = firstNum + secondNum;
+                case "-" -> equals = firstNum - secondNum;
+                case "*" -> equals = firstNum * secondNum;
+                case "/" -> equals = firstNum / secondNum;
+                default -> equals = 0.0;
+            }
+            input.setText(String.valueOf(equals));
         });
     }
 }
