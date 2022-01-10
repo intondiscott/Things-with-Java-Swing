@@ -1,37 +1,26 @@
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Window extends JFrame {
-    public Window() { }
+public class Window {
+    private final JFrame window;
 
-    void makeWindow(){
-        this.setDefaultCloseOperation(this.EXIT_ON_CLOSE);
-        this.setLocationRelativeTo(null);
-        this.setSize(400,400);
-        this.setLayout(null);
-        this.setVisible(true);
-        }
-    void createDesktop(){
+    Window(String title) {
+        window = new JFrame(title);
+        window.setDefaultCloseOperation(window.EXIT_ON_CLOSE);
+        window.setLocationRelativeTo(null);
+        window.setSize(400, 400);
+        window.setLayout(null);
+    }
+
+    void createDesktop() {
         Icon icon = new ImageIcon("src/assets/calc.png");
         JButton button = new JButton(icon);
         Calculator calc = new Calculator();
         calc.makeUI();
-        button.setBounds(10,10,30,40);
-        this.add(button);
+        button.setBounds(10, 10, 30, 40);
+        window.add(button);
         button.setFocusable(false);
-        button.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                while(!calc.getVisibility()) {
-                    calc.setVisibility(true);
-                    calc.setVisible(true);
-                }
-                if(calc.getVisibility()){
-                    calc.setVisibility(false);
-                }
-            }
-        });
-        }
+        button.addActionListener(e -> calc.setVisible(!calc.isVisible()));
+        window.setVisible(true);//do this after u are done modifying the UI
+        //otherwise you need to call `window.repaint()` since you just added a button to the UI
     }
+}
